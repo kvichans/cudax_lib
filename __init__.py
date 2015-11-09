@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿''' Py-extensions for CudaText.
 Override option tools:
     get_opt(path, def_value=None, level=CONFIG_LEV_ALL, ed=ed)
@@ -730,3 +731,6 @@ ToDo
 [?][kv-at][02nov15] При stream-comm верт.выделении с неск каретками не давать ed.get_sel_mode()==SEL_COLUMN
 [ ][kv-kv][02nov15] При line-comm и добавлении/удалении символов перед выделением происходит смещение выделения. Избавиться!
 '''
+=======
+
+>>>>>>> origin/master
