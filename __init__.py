@@ -72,37 +72,37 @@ pass;                           log_gap = ''    # use only into log()
 class Command:
     ###############################################
     ## Menus
-#   def load_main_menu(self):
-#       ''' Reset main menu from config file
-#       '''
-#       mn_cfg_json = get_opt('config_main_menu', '')
-#       pass;                  LOG and log('mn_cfg_json={}',mn_cfg_json)
-#       if not mn_cfg_json:    return
-#       mn_cfg_json = os.path.join(app.app_path(app.APP_DIR_SETTINGS), mn_cfg_json)
-#       mn_cfg      = _json_loads(open(mn_cfg_json).read())
-#       pass;                  LOG and log('mn_cfg={}',pfrm15(mn_cfg))
-#       mn_items    = mn_cfg["items"]
-#       for mn_item in mn_items:
-#           for mn_id in mn_item:
-#               pass;          #LOG and log('mn_id={}',pfrm15(mn_id))
-#               self._reset_menu(mn_id, mn_item[mn_id])
-#      #def load_main_menu
-#
-#   def _reset_menu(self, mn_id, mn_items):
-#       pass;                  LOG and log('mn_id, mn_items={}',(mn_id, pfrm15(mn_items)))
-#       # Inspect cur menu
-#   #   app.app_proc(app.PROC_MENU_ENUM, mn_id)
-#       # Clear old items
-##       app.app_proc(app.PROC_MENU_CLEAR, mn_id)
-#       for mn_item in mn_items:
-#           if False:pass
-#           elif 'id' in mn_item:
-#               # Command!
-#           elif 'items' in mn_item:
-#               # Submenu!
-#               for mn_id in mn_item:
-#                   self._reset_menu(mn_id, mn_item[mn_id])
-#      #def _reset_menu
+    def load_main_menu(self):
+        ''' Reset main menu from config file
+        '''
+        mn_cfg_json = get_opt('config_main_menu', '')
+        pass;                  LOG and log('mn_cfg_json={}',mn_cfg_json)
+        if not mn_cfg_json:    return
+        mn_cfg_json = os.path.join(app.app_path(app.APP_DIR_SETTINGS), mn_cfg_json)
+        mn_cfg      = _json_loads(open(mn_cfg_json).read())
+        pass;                  LOG and log('mn_cfg={}',pfrm15(mn_cfg))
+        mn_items    = mn_cfg["items"]
+        for mn_item in mn_items:
+            for mn_id in mn_item:
+                pass;          #LOG and log('mn_id={}',pfrm15(mn_id))
+                self._reset_menu(mn_id, mn_item[mn_id])
+       #def load_main_menu
+
+    def _reset_menu(self, mn_id, mn_items):
+        pass;                  LOG and log('mn_id, mn_items={}',(mn_id, pfrm15(mn_items)))
+        # Inspect cur menu
+    #   app.app_proc(app.PROC_MENU_ENUM, mn_id)
+        # Clear old items
+#       app.app_proc(app.PROC_MENU_CLEAR, mn_id)
+        for mn_item in mn_items:
+            if False:pass
+            elif 'id' in mn_item:
+                # Command!
+            elif 'items' in mn_item:
+                # Submenu!
+                for mn_id in mn_item:
+                    self._reset_menu(mn_id, mn_item[mn_id])
+       #def _reset_menu
 
     ###############################################
     ## Comments
