@@ -30,7 +30,7 @@ from    cudatext    import ed
 import  cudatext_cmd    as cmds
 import  os, json, re
 
-# Override option tools:
+# Overrided option tools:
 CONFIG_LEV_DEF      = 'def'
 CONFIG_LEV_USER     = 'user'
 CONFIG_LEV_LEX      = 'lex'
@@ -60,44 +60,49 @@ DUPLICATION             = 'Duplication'
 ONLY_NORM_SEL_MODE      = '{} works only with normal selection'
 CMT_NO_LINE_4LEX        = 'No line comment for lexer "{}"'
 CMT_NO_STRM_4LEX        = 'No stream comment for lexer "{}"'
-ONLY_SINGLE_CRT         = '{} doesnt works with many multi-carets'
+ONLY_SINGLE_CRT         = "{} doesn't work with multi-carets"
 
 pass;                           # Logging
 pass;                           import inspect  # stack
 pass;                           from pprint import pformat
 pass;                           pfrm15=lambda d:pformat(d,width=15)
-pass;                           LOG = (-2== 2)  # Do or dont logging.
+pass;                           LOG = (-2==-2)  # Do or dont logging.
 pass;                           log_gap = ''    # use only into log()
 
 class Command:
     ###############################################
     ## Menus
-    def load_main_menu(self):
-        ''' Reset main menu from config file
-        '''
-        mn_cfg_json = get_opt('config_main_menu', '')
-        pass;                  #LOG and log('mn_cfg_json={}',mn_cfg_json)
-        if not mn_cfg_json:    return
-        mn_cfg_json = os.path.join(app.app_path(app.APP_DIR_SETTINGS), mn_cfg_json)
-        mn_cfg      = _json_loads(open(mn_cfg_json).read())
-        pass;                  #LOG and log('mn_cfg={}',pfrm15(mn_cfg))
-        mn_items    = mn_cfg["items"]
-        for mn_item in mn_items:
-            for mn_id in mn_item:
-                pass;          #LOG and log('mn_id={}',pfrm15(mn_id))
-                self._reset_menu(mn_id, mn_item[mn_id])
-       #def load_main_menu
-
-    def _reset_menu(self, mn_id, mn_items):
-        pass;                  #LOG and log('mn_id, mn_items={}',(mn_id, pfrm15(mn_items)))
-        # Inspect cur menu
-    #   app.app_proc(app.PROC_MENU_ENUM, mn_id)
-        # Clear old items
-#       app.app_proc(app.PROC_MENU_CLEAR, mn_id)
-        for mn_item in mn_items:
-            for mn_id in mn_item:
-                self._reset_menu(mn_id, mn_item[mn_id])
-       #def _reset_menu
+#   def load_main_menu(self):
+#       ''' Reset main menu from config file
+#       '''
+#       mn_cfg_json = get_opt('config_main_menu', '')
+#       pass;                  LOG and log('mn_cfg_json={}',mn_cfg_json)
+#       if not mn_cfg_json:    return
+#       mn_cfg_json = os.path.join(app.app_path(app.APP_DIR_SETTINGS), mn_cfg_json)
+#       mn_cfg      = _json_loads(open(mn_cfg_json).read())
+#       pass;                  LOG and log('mn_cfg={}',pfrm15(mn_cfg))
+#       mn_items    = mn_cfg["items"]
+#       for mn_item in mn_items:
+#           for mn_id in mn_item:
+#               pass;          #LOG and log('mn_id={}',pfrm15(mn_id))
+#               self._reset_menu(mn_id, mn_item[mn_id])
+#      #def load_main_menu
+#
+#   def _reset_menu(self, mn_id, mn_items):
+#       pass;                  LOG and log('mn_id, mn_items={}',(mn_id, pfrm15(mn_items)))
+#       # Inspect cur menu
+#   #   app.app_proc(app.PROC_MENU_ENUM, mn_id)
+#       # Clear old items
+##       app.app_proc(app.PROC_MENU_CLEAR, mn_id)
+#       for mn_item in mn_items:
+#           if False:pass
+#           elif 'id' in mn_item:
+#               # Command!
+#           elif 'items' in mn_item:
+#               # Submenu!
+#               for mn_id in mn_item:
+#                   self._reset_menu(mn_id, mn_item[mn_id])
+#      #def _reset_menu
 
     ###############################################
     ## Comments
@@ -415,7 +420,7 @@ def _get_file_opts(opts_json, def_opts={}):
    #def _get_file_opts
 
 def get_opt(path, def_value=None, lev=CONFIG_LEV_ALL, ed_cfg=ed):
-    ''' Override options tool.
+    ''' Overrided options tool.
         Config pairs key:val are read from
             <root>/settings_default/default.json
             <root>/settings/user.json
