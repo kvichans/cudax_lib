@@ -1,0 +1,40 @@
+{
+,"top-file":{
+	,"how":"clear" 
+	,"sub":[
+	,	{"cap":"New file-kv"	,"cmd":"cmd_FileNew"}
+	,	{"cap":"Open..."		,"cmd":"cmd_FileOpen"}
+	,	{"cap":"Open recent"	,"cmd":"recent"}
+	,	{"cap":"Reopen"			,"cmd":"cmd_FileReopen"}
+	,	{"cap":"-"}
+	,	{"cap":"Save"			,"cmd":"cmd_FileSave"}
+	,	{"cap":"Save as ..."	,"cmd":"cmd_FileSaveAs"}
+	,	{"cap":"Save all"		,"cmd":"cmd_FileSaveAll"}
+	,	{"cap":"-"}
+	,	{"cap":"Close"			,"cmd":"cmd_FileClose"}
+	,	{"cap":"Close all"		,"cmd":"cmd_FileCloseAll"}
+	,	{"cap":"Close other all","cmd":"cmd_FileCloseOtherAll"}
+	,	{"cap":"-"}
+	,	{"cap":"Open recent"	,"cmd":"recent"}
+	,	{"cap":"Encoding"		,"sub":[
+		,	{"cap":"Reload as"	,"sub":[
+			,	{"cap":"ANSI"	,"cmd":"cmd_Encoding_ansi_Reload"}
+			,	{"cap":"UTF-8"	,"cmd":"cmd_Encoding_utf8nobom_Reload"}
+			]}
+		,	{"cap":"Convert to"	,"sub":[
+			,	{"cap":"ANSI"	,"cmd":"cmd_Encoding_ansi_NoReload"}
+			,	{"cap":"UTF-8"	,"cmd":"cmd_Encoding_utf8nobom_NoReload"}
+			]}
+		]}
+	,	{"cap":"Line ends"		,"sub":[
+		,	{"cap":"Win"		,"cmd":"cmd_LineEndWin"}
+		,	{"cap":"Unix"		,"cmd":"cmd_LineEndUnix"}
+		,	{"cap":"Mac"		,"cmd":"cmd_LineEndMac"}
+		]}
+	,	{"cap":"-"}
+	,	{"cap":"Export to HTML"	,"cmd":"cmd_FileExportHtml"}
+	,	{"cap":"-"}
+	,	{"cap":"Exit"			,"cmd":"cmd_FileExit"}
+	]
+   }
+}
