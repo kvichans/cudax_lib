@@ -66,7 +66,7 @@ pass;                           # Logging
 pass;                           import inspect  # stack
 pass;                           from pprint import pformat
 pass;                           pfrm15=lambda d:pformat(d,width=15)
-pass;                           LOG = (-2==-2)  # Do or dont logging.
+pass;                           LOG = (-2== 2)  # Do or dont logging.
 pass;                           log_gap = ''    # use only into log()
 
 class Command:
