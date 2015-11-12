@@ -16,7 +16,7 @@ Duplicate:
     duplicate
         Dub cur selection or cur line (by opt)
 Config menus
-    load_main_menu()
+    config_menus
 Authors:
     Andrey Kvichansky    (kvichans on githab)
 Version:
@@ -28,7 +28,7 @@ ToDo: (see end of file)
 import  cudatext        as app
 from    cudatext    import ed
 import  cudatext_cmd    as cmds
-import  os, json, re
+import  os, json, re, sys
 
 # Overrided option tools:
 CONFIG_LEV_DEF      = 'def'
@@ -61,47 +61,83 @@ ONLY_NORM_SEL_MODE      = '{} works only with normal selection'
 CMT_NO_LINE_4LEX        = 'No line comment for lexer "{}"'
 CMT_NO_STRM_4LEX        = 'No stream comment for lexer "{}"'
 ONLY_SINGLE_CRT         = "{} doesn't work with multi-carets"
+MENU_NO_FILE            = 'No menu config file "{}"'
+MENU_NO_PRE_ID          = 'Skip config for id="{}" - no such main submenu'
 
 pass;                           # Logging
 pass;                           import inspect  # stack
 pass;                           from pprint import pformat
 pass;                           pfrm15=lambda d:pformat(d,width=15)
-pass;                           LOG = (-2== 2)  # Do or dont logging.
+pass;                           LOG = (-2==-2)  # Do or dont logging.
 pass;                           log_gap = ''    # use only into log()
 
 class Command:
     ###############################################
     ## Menus
-    def load_main_menu(self):
-        ''' Reset main menu from config file
+    def config_menus(self):
+        ''' Reset some menus from config file
+            File structure is dict with pairs
+                {<menu_pre_key>:{<configs-pre>}, <menu_pre_key>:{<config-pre>} ...}
+            <menu_pre_key> from list                            (default menu entries)
+                "top" "top-file" "top-edit" "top-sel" "top-sr" "top-view" "text"
+            <config-pre> is dict with pairs
+                "how": "clear"|"add"                            ("add" to append (default), "clear" to remove prev content)
+                "sub": [<config-item> ,<config-item> ...]
+            <config-item> is dict with pairs
+                "cap": <visible name>|"-"                       ("-" for separator)
+                "cmd": <int command code>|<py-module,method>    (for cmd-item, ignored if "cap"=="-")
+                "sub":[<config-item> ,<config-item> ...]        (for submenu, ignored if "cmd")
         '''
-        mn_cfg_json = get_opt('config_main_menu', '')
-        pass;                  LOG and log('mn_cfg_json={}',mn_cfg_json)
-        if not mn_cfg_json:    return
+        mn_cfg_json = get_opt('config_menus_from', '')
+        pass;                 #LOG and log('mn_cfg_json={}',mn_cfg_json)
+        if not mn_cfg_json:    return app.msg_status(MENU_NO_FILE.format(mn_cfg_json))
         mn_cfg_json = os.path.join(app.app_path(app.APP_DIR_SETTINGS), mn_cfg_json)
         mn_cfg      = _json_loads(open(mn_cfg_json).read())
-        pass;                  LOG and log('mn_cfg={}',pfrm15(mn_cfg))
-        mn_items    = mn_cfg["items"]
-        for mn_item in mn_items:
-            for mn_id in mn_item:
-                pass;          #LOG and log('mn_id={}',pfrm15(mn_id))
-                self._reset_menu(mn_id, mn_item[mn_id])
-       #def load_main_menu
+        pass;                 #LOG and log('mn_cfg={}',pfrm15(mn_cfg))
+        pre_list    = (PROC_MENU_TOP
+                      ,PROC_MENU_TOP_FILE
+                      ,PROC_MENU_TOP_EDIT
+                      ,PROC_MENU_TOP_SEL
+                      ,PROC_MENU_TOP_SR  
+                      ,PROC_MENU_TOP_VIEW
+                      ,PROC_MENU_TEXT)
+        for mn_pre_id, mn_pre in mn_cfg.items():
+            if mn_pre_id not in pre_list:
+                app.msg_status(MENU_NO_PRE_ID.format(mn_pre_id))
+                continue # for mn_pre_id
+            if mn_pre.get('how', 'add') == 'clear':
+                pass
+                app.app_proc(app.PROC_MENU_CLEAR, mn_pre_id)
+            self._reset_menu(mn_pre_id, mn_pre.get('sub', []))
+       #def config_menus
 
-    def _reset_menu(self, mn_id, mn_items):
-        pass;                  LOG and log('mn_id, mn_items={}',(mn_id, pfrm15(mn_items)))
-        # Inspect cur menu
-    #   app.app_proc(app.PROC_MENU_ENUM, mn_id)
-        # Clear old items
-#       app.app_proc(app.PROC_MENU_CLEAR, mn_id)
+    def _reset_menu(self, mn_prnt_id, mn_items):
+        pass;                  #LOG and log('>>mn_prnt_id, mn_items={}',(mn_prnt_id, pfrm15(mn_items)))
         for mn_item in mn_items:
+            cap     = mn_item.get('cap', '').strip()
+            cmd     = mn_item.get('cmd', '').strip()
+            subs    = mn_item.get('sub', [])
             if False:pass
-            elif 'id' in mn_item:
-                # Command!
-            elif 'items' in mn_item:
+            elif ''==cap:
+                pass
+            elif '-'==cap:
+                # Sep!
+                pass
+                app.app_proc(           app.PROC_MENU_ADD, '{};{};{}'.format(mn_prnt_id, '',    cap))
+                pass;          #LOG and log('sep')
+            elif ''!=cmd:
+                # Cmd!
+                cmd = str(eval('cmds.'+cmd)) if cmd.startswith('cmd_') or cmd.startswith('cCommand_') else cmd
+#               cmd = '{'+cmd+'}' if cmd.startswith('cmd_') or cmd.startswith('cCommand_') else cmd
+                app.app_proc(           app.PROC_MENU_ADD, '{};{};{}'.format(mn_prnt_id, cmd,   cap))
+                pass;          #LOG and log('cmd={}',cmd)
+            elif subs:
                 # Submenu!
-                for mn_id in mn_item:
-                    self._reset_menu(mn_id, mn_item[mn_id])
+                id_sub  = app.app_proc( app.PROC_MENU_ADD, '{};{};{}'.format(mn_prnt_id, 0,     cap))
+                pass;          #LOG and log('?? id_sub, subs={}',(id_sub, subs))
+                self._reset_menu(id_sub, subs)
+                pass;          #LOG and log('ok id_sub={}',(id_sub))
+        pass;                  #LOG and log('<<')
        #def _reset_menu
 
     ###############################################
@@ -620,9 +656,19 @@ def _json_loads(s, **kw):
     s = re.sub(',\s*}'  , '}' , s)
     s = re.sub('\[\s*,' , '[' , s)
     s = re.sub(',\s*\]' , ']' , s)
-    pass;                      #LOG and log('s={}',s)
-    return json.loads(s, **kw)
+    try:
+        ans = json.loads(s, **kw)
+    except:
+        pass;                  LOG and log('FAIL: s={}',s)
+        pass;                  LOG and log('sys.exc_info()={}',sys.exc_info())
+        open(kw.get('log_file', _get_log_file()), 'a').write('_json_loads FAIL: s=\n'+s)
+        ans = None
+    return ans
+#   return json.loads(s, **kw)
     #def _json_loads
+
+def _get_log_file():
+    return os.path.join(app.app_path(app.APP_DIR_SETTINGS), 'cudax.log')
 
 def get_def_setting_dir():
     pass;                     #LOG and log('os.path.dirname(app.app_path(app.APP_DIR_SETTINGS))={}', os.path.dirname(app.app_path(app.APP_DIR_SETTINGS)))
