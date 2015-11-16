@@ -20,7 +20,7 @@ Config menus
 Authors:
     Andrey Kvichansky    (kvichans on githab)
 Version:
-    '0.4.3 2015-11-10'
+    '0.5.1 2015-11-16'
 Wiki: github.com/kvichans/cudax_lib/wiki
 ToDo: (see end of file)
 '''
@@ -46,6 +46,8 @@ PROC_MENU_TOP_EDIT  = 'top-edit'
 PROC_MENU_TOP_SEL   = 'top-sel'
 PROC_MENU_TOP_SR    = 'top-sr'
 PROC_MENU_TOP_VIEW  = 'top-view'
+PROC_MENU_TOP_OPTS  = 'top-op'
+PROC_MENU_TOP_HELP  = 'top-help'
 PROC_MENU_TEXT      = 'text'
 PROC_MENU_RECENTS   = 'recents'
 PROC_MENU_THEMES    = 'themes'
@@ -79,7 +81,7 @@ class Command:
             File structure is dict with pairs
                 {<menu_pre_key>:{<configs-pre>}, <menu_pre_key>:{<config-pre>} ...}
             <menu_pre_key> from list                            (default menu entries)
-                "top" "top-file" "top-edit" "top-sel" "top-sr" "top-view" "text"
+                "top" "top-file" "top-edit" "top-sel" "top-sr" "top-view" "top-op" "top-help" "text"
             <config-pre> is dict with pairs
                 "how": "clear"|"add"                            ("add" to append (default), "clear" to remove prev content)
                 "sub": [<config-item> ,<config-item> ...]
@@ -88,7 +90,7 @@ class Command:
                 "cmd": <int command code>|<py-module,method>    (for cmd-item, ignored if "cap"=="-")
                 "sub":[<config-item> ,<config-item> ...]        (for submenu, ignored if "cmd")
         '''
-        mn_cfg_json = get_opt('config_menus_from', '')
+        mn_cfg_json = get_opt('config_menus_from', 'menu.json')
         pass;                 #LOG and log('mn_cfg_json={}',mn_cfg_json)
         if not mn_cfg_json:    return app.msg_status(MENU_NO_FILE.format(mn_cfg_json))
         mn_cfg_json = os.path.join(app.app_path(app.APP_DIR_SETTINGS), mn_cfg_json)
@@ -100,6 +102,8 @@ class Command:
                       ,PROC_MENU_TOP_SEL
                       ,PROC_MENU_TOP_SR  
                       ,PROC_MENU_TOP_VIEW
+                      ,PROC_MENU_TOP_OPTS
+                      ,PROC_MENU_TOP_HELP
                       ,PROC_MENU_TEXT)
         for mn_pre_id, mn_pre in mn_cfg.items():
             if mn_pre_id not in pre_list:
@@ -124,13 +128,10 @@ class Command:
                 # Sep!
                 pass
                 app.app_proc(           app.PROC_MENU_ADD, '{};{};{}'.format(mn_prnt_id, '',    cap))
-                pass;          #LOG and log('sep')
             elif ''!=cmd:
                 # Cmd!
                 cmd = str(eval('cmds.'+cmd)) if cmd.startswith('cmd_') or cmd.startswith('cCommand_') else cmd
-#               cmd = '{'+cmd+'}' if cmd.startswith('cmd_') or cmd.startswith('cCommand_') else cmd
                 app.app_proc(           app.PROC_MENU_ADD, '{};{};{}'.format(mn_prnt_id, cmd,   cap))
-                pass;          #LOG and log('cmd={}',cmd)
             elif subs:
                 # Submenu!
                 id_sub  = app.app_proc( app.PROC_MENU_ADD, '{};{};{}'.format(mn_prnt_id, 0,     cap))
@@ -426,16 +427,16 @@ def _check_API(ver):
         return False
     return True
 
-def get_app_default_opts():
+def get_app_default_opts(**kw):
     global APP_DEFAULT_OPTS
     if not APP_DEFAULT_OPTS:
         # Once load def-opts
         def_lexs_json    = os.path.join(get_def_setting_dir(), 'default.json')
-        APP_DEFAULT_OPTS = _json_loads(open(def_lexs_json).read())
+        APP_DEFAULT_OPTS = _json_loads(open(def_lexs_json).read(), **kw)
     return APP_DEFAULT_OPTS
    #def get_app_default_opts
 
-def _get_file_opts(opts_json, def_opts={}):
+def _get_file_opts(opts_json, def_opts={}, **kw):
 #   global LAST_FILE_OPTS
     if not os.path.exists(opts_json):
         pass;              #LOG and log('no {}',os.path.basename(opts_json))
@@ -444,13 +445,13 @@ def _get_file_opts(opts_json, def_opts={}):
     mtime_os    = os.path.getmtime(opts_json)
     if opts_json not in LAST_FILE_OPTS:
         pass;              #LOG and log('load "{}" with mtime_os={}',os.path.basename(opts_json), int(mtime_os))
-        opts    = _json_loads(open(opts_json).read())
+        opts    = _json_loads(open(opts_json).read(), **kw)
         LAST_FILE_OPTS[opts_json]       = (opts, mtime_os)
     else:
         opts, mtime = LAST_FILE_OPTS[opts_json]
         if mtime_os > mtime:
             pass;          #LOG and log('reload "{}" with mtime, mtime_os={}',os.path.basename(opts_json), (int(mtime), int(mtime_os)))
-            opts= _json_loads(open(opts_json).read())
+            opts= _json_loads(open(opts_json).read(), **kw)
             LAST_FILE_OPTS[opts_json]   = (opts, mtime_os)
     return opts
    #def _get_file_opts
@@ -651,11 +652,11 @@ def _json_loads(s, **kw):
             Delete comments
             Delete unnecessary ',' from {,***,} and [,***,]
     '''
-    s = re.sub('//.*'   , ''  , s)
-    s = re.sub('{\s*,'  , '{' , s)
-    s = re.sub(',\s*}'  , '}' , s)
-    s = re.sub('\[\s*,' , '[' , s)
-    s = re.sub(',\s*\]' , ']' , s)
+    s = re.sub(r'//.*'   , ''  , s)
+    s = re.sub(r'{\s*,'  , '{' , s)
+    s = re.sub(r',\s*}'  , '}' , s)
+    s = re.sub(r'\[\s*,' , '[' , s)
+    s = re.sub(r',\s*\]' , ']' , s)
     try:
         ans = json.loads(s, **kw)
     except:

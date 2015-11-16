@@ -1,27 +1,43 @@
 {"top-file":
     {"how":"clear"
     ,"sub":
-    [// {"cap":"New file-kv"        ,"cmd":"cmd_FileNew"}
-  //,   {"cap":"Open..."            ,"cmd":"cmd_FileOpen"}
+    [   {"cap":"New file"           ,"cmd":"cmd_FileNew"}
+    ,   {"cap":"Open..."            ,"cmd":"cmd_FileOpen"}
     ,   {"cap":"Open recent"        ,"cmd":"recents"}
     ,   {"cap":"Reopen"             ,"cmd":"cmd_FileReopen"}
-  //,   {"cap":"-"}
-  //,   {"cap":"Save"               ,"cmd":"cmd_FileSave"}
-  //,   {"cap":"Save as ..."        ,"cmd":"cmd_FileSaveAs"}
-  //,   {"cap":"Save all"           ,"cmd":"cmd_FileSaveAll"}
-  //,   {"cap":"-"}
-  //,   {"cap":"Close"              ,"cmd":"cmd_FileClose"}
-  //,   {"cap":"Close all"          ,"cmd":"cmd_FileCloseAll"}
-  //,   {"cap":"Close other all"    ,"cmd":"cmd_FileCloseOtherAll"}
-  //,   {"cap":"-"}
+    ,   {"cap":"-"}
+    ,   {"cap":"Save"               ,"cmd":"cmd_FileSave"}
+    ,   {"cap":"Save as ..."        ,"cmd":"cmd_FileSaveAs"}
+    ,   {"cap":"Save all"           ,"cmd":"cmd_FileSaveAll"}
+    ,   {"cap":"-"}
+    ,   {"cap":"Close"              ,"cmd":"cmd_FileClose"}
+    ,   {"cap":"Close all"          ,"cmd":"cmd_FileCloseAll"}
+    ,   {"cap":"Close other all"    ,"cmd":"cmd_FileCloseOtherAll"}
+    ,   {"cap":"-"}
     ,   {"cap":"Encoding"           ,"sub":
         [   {"cap":"Reload as"      ,"sub":
-            [    {"cap":"ANSI"      ,"cmd":"cmd_Encoding_ansi_Reload"}
-            ,    {"cap":"UTF-8"     ,"cmd":"cmd_Encoding_utf8nobom_Reload"}
+            [   {"cap":"ANSI"           ,"cmd":"cmd_Encoding_ansi_Reload"}
+            ,   {"cap":"UTF-8"          ,"cmd":"cmd_Encoding_utf8_Reload"}
+            ,   {"cap":"UTF-8 no bom"   ,"cmd":"cmd_Encoding_utf8nobom_Reload"}
+            ,   {"cap":"UTF-16 le"      ,"cmd":"cmd_Encoding_utf16le_Reload"}
+            ,   {"cap":"UTF-16 be"      ,"cmd":"cmd_Encoding_utf16be_Reload"}
+            ,   {"cap":"Europian"       ,"sub":
+                [   {"cap":"CP1250"     ,"cmd":"cmd_Encoding_cp1250_Reload"}
+                ,   {"cap":"CP1251"     ,"cmd":"cmd_Encoding_cp1251_Reload"}
+                ,   {"cap":"CP1252"     ,"cmd":"cmd_Encoding_cp1252_Reload"}
+                ]}
             ]}
         ,    {"cap":"Convert to"    ,"sub":
-            [    {"cap":"ANSI"      ,"cmd":"cmd_Encoding_ansi_NoReload"}
-            ,    {"cap":"UTF-8"     ,"cmd":"cmd_Encoding_utf8nobom_NoReload"}
+            [    {"cap":"ANSI"          ,"cmd":"cmd_Encoding_ansi_NoReload"}
+            ,   {"cap":"UTF-8"          ,"cmd":"cmd_Encoding_utf8_NoReload"}
+            ,   {"cap":"UTF-8 no bom"   ,"cmd":"cmd_Encoding_utf8nobom_NoReload"}
+            ,   {"cap":"UTF-16 le"      ,"cmd":"cmd_Encoding_utf16le_NoReload"}
+            ,   {"cap":"UTF-16 be"      ,"cmd":"cmd_Encoding_utf16be_NoReload"}
+            ,   {"cap":"Europian"       ,"sub":
+                [   {"cap":"CP1250"     ,"cmd":"cmd_Encoding_cp1250_NoReload"}
+                ,   {"cap":"CP1251"     ,"cmd":"cmd_Encoding_cp1251_NoReload"}
+                ,   {"cap":"CP1252"     ,"cmd":"cmd_Encoding_cp1252_NoReload"}
+                ]}
             ]}
         ]}
     ,   {"cap":"Line ends"          ,"sub":
@@ -29,9 +45,9 @@
         ,   {"cap":"Unix"           ,"cmd":"cmd_LineEndUnix"}
         ,   {"cap":"Mac"            ,"cmd":"cmd_LineEndMac"}
         ]}
-  //,   {"cap":"-"}
-  //,   {"cap":"Export to HTML"     ,"cmd":"cmd_FileExportHtml"}
-  //,   {"cap":"-"}
+    ,   {"cap":"-"}
+    ,   {"cap":"Export to HTML"     ,"cmd":"cmd_FileExportHtml"}
+    ,   {"cap":"-"}
     ,   {"cap":"Exit"               ,"cmd":"cmd_FileExit"}
     ]}
 ,"top-edit":
@@ -44,22 +60,22 @@
     ,   {"cap":"Cut"                        ,"cmd":"cCommand_ClipboardCut"}
     ,   {"cap":"Copy"                       ,"cmd":"cCommand_ClipboardCopy"}
     ,   {"cap":"Paste"                      ,"cmd":"cCommand_ClipboardPaste"}
-    ,   {"cap":"Delete"                     ,"cmd":"cCommand_KeyDelete"}                //??
+    ,   {"cap":"Delete"                     ,"cmd":"cCommand_KeyDelete"}
     ,   {"cap":"-"}
     ,   {"cap":"Copy to clipboard"          ,"sub":
-        [   {"cap":"Copy current line"      ,"cmd":"cCommand_ClipboardCopy"}    //?? cmd_CopyLine
+        [   {"cap":"Copy current line"      ,"cmd":"cCommand_ClipboardCopy"}
         ,   {"cap":"Copy/append selection"  ,"cmd":"cCommand_ClipboardCopyAdd"}
         ,   {"cap":"-"}
-        ,   {"cap":"Copy full filepath"     ,"cmd":"cmd_CopyFilenameFull"}      //??
-        ,   {"cap":"Copy filepath only"     ,"cmd":"cmd_CopyFilenameDir"}       //??
-        ,   {"cap":"Copy filename only"     ,"cmd":"cmd_CopyFilenameName"}      //??
+        ,   {"cap":"Copy full filepath"     ,"cmd":"cmd_CopyFilenameFull"}
+        ,   {"cap":"Copy filepath only"     ,"cmd":"cmd_CopyFilenameDir"}
+        ,   {"cap":"Copy filename only"     ,"cmd":"cmd_CopyFilenameName"}
         ]}
     ,   {"cap":"Line operations"            ,"sub":
         [   {"cap":"Delete line(s)"         ,"cmd":"cCommand_TextDeleteLine"}
-        ,   {"cap":"Duplicate line(s)"      ,"cmd":"cmd_DuplicateLineEx"}       //?? cCommand_TextDuplicateLine
+        ,   {"cap":"Duplicate line(s)"      ,"cmd":"cmd_DuplicateLineEx"}
         ,   {"cap":"-"}
-        ,   {"cap":"Move line(s) up"        ,"cmd":"cCommand_MoveSelectionUp"}  //??
-        ,   {"cap":"Move line(s) down"      ,"cmd":"cCommand_MoveSelectionDown"}//??
+        ,   {"cap":"Move line(s) up"        ,"cmd":"cCommand_MoveSelectionUp"}
+        ,   {"cap":"Move line(s) down"      ,"cmd":"cCommand_MoveSelectionDown"}
         ]}
     ,   {"cap":"Blank operations"           ,"sub":
         [   {"cap":"Indent"                 ,"cmd":"cCommand_TextIndent"}
@@ -81,12 +97,12 @@
         ,   {"cap":"Sort lines desc"        ,"cmd":"cmd_SortDesc"}
         ]}
     ,   {"cap":"Comments"                   ,"sub":
-        [   {"cap":"Add line comment"       ,"cmd":"cmd_CommentLineAdd_AtStart"}
-      //,   {"cap":"Add line comment at nonspace"   ,"cmd":"cmd_CommentLineAdd_AtNonspace"}
-        ,   {"cap":"Remove line comment"    ,"cmd":"cmd_CommentLineRemove"}
-        ,   {"cap":"Toggle line comment"    ,"cmd":"cmd_CommentLineToggle_AtStart"}
-      //,   {"cap":"Toggle line comment at nonspace","cmd":"cmd_CommentLineToggle_AtNonspace"}
-        ,   {"cap":"Toggle stream comment"  ,"cmd":"cmd_CommentStreamToggle"}
+        [   {"cap":"Add line comment"               ,"cmd":"cmd_CommentLineAdd_AtStart"}
+        ,   {"cap":"Add line comment at nonspace"   ,"cmd":"cmd_CommentLineAdd_AtNonspace"}
+        ,   {"cap":"Remove line comment"            ,"cmd":"cmd_CommentLineRemove"}
+        ,   {"cap":"Toggle line comment"            ,"cmd":"cmd_CommentLineToggle_AtStart"}
+        ,   {"cap":"Toggle line comment at nonspace","cmd":"cmd_CommentLineToggle_AtNonspace"}
+        ,   {"cap":"Toggle stream comment"          ,"cmd":"cmd_CommentStreamToggle"}
         ]}
     ]}
 ,"top-sel":
@@ -97,7 +113,7 @@
     ,   {"cap":"Extend selection by line"           ,"cmd":"cCommand_SelectExtendByLine"}
     ,   {"cap":"Invert selection"                   ,"cmd":"cCommand_SelectInverted"}
     ,   {"cap":"-"}
-    ,   {"cap":"Cancel carets"                      ,"cmd":"cCommand_Cancel"}           //??
+    ,   {"cap":"Cancel carets"                      ,"cmd":"cCommand_Cancel"}
     ,   {"cap":"Extend carets"                      ,"sub":
         [   {"cap":"More carets, up, 1 line"        ,"cmd":"cCommand_CaretsExtendUpLine"}
         ,   {"cap":"More carets, up, 1 page"        ,"cmd":"cCommand_CaretsExtendUpPage"}
@@ -111,28 +127,27 @@
 ,"top-sr":
     {"how":"clear"
     ,"sub":
-    [// {"cap":"Find..."                    ,"cmd":"cmd_DialogFind"}
-  //,   {"cap":"Replace..."                 ,"cmd":"cmd_DialogReplace"}
-  //,   {"cap":"Find next"                  ,"cmd":"cmd_FindNext"}
-  //,   {"cap":"Find prev"                  ,"cmd":"cmd_FindPrev"}
-  //,   {"cap":"-"}
-  //,   {"cap":"Find current word next"     ,"cmd":"cmd_FindCurWordNext"}
-  //,   {"cap":"Find current word prev"     ,"cmd":"cmd_FindCurWordPrev"}
-  //,   {"cap":"Find current selection next","cmd":"cmd_FindCurSelNext"}
-  //,   {"cap":"Find current selection prev","cmd":"cmd_FindCurSelPrev"}
-  //,   {"cap":"-"}
-  //,   {"cap":"Go to line..."              ,"cmd":"cmd_DialogGoto"}
+    [   {"cap":"Find..."                    ,"cmd":"cmd_DialogFind"}
+    ,   {"cap":"Replace..."                 ,"cmd":"cmd_DialogReplace"}
+    ,   {"cap":"Find next"                  ,"cmd":"cmd_FindNext"}
+    ,   {"cap":"Find prev"                  ,"cmd":"cmd_FindPrev"}
+    ,   {"cap":"-"}
+    ,   {"cap":"Find current word next"     ,"cmd":"cmd_FindCurWordNext"}
+    ,   {"cap":"Find current word prev"     ,"cmd":"cmd_FindCurWordPrev"}
+    ,   {"cap":"Find current selection next","cmd":"cmd_FindCurSelNext"}
+    ,   {"cap":"Find current selection prev","cmd":"cmd_FindCurSelPrev"}
+    ,   {"cap":"-"}
+    ,   {"cap":"Go to line..."              ,"cmd":"cmd_DialogGoto"}
     ,   {"cap":"Go to tag..."               ,"cmd":"cmd_DialogTabs"}
     ,   {"cap":"Go to bookmark..."          ,"cmd":"cmd_DialogGotoBm"}
-  //,   {"cap":"Bookmarks"                  ,"sub":
-      //[   {"cap":"Go to next bookmark"    ,"cmd":"cmd_BookmarkGotoNext"}
-        ,   {"cap":"Go to next bookmark"    ,"cmd":"cmd_BookmarkGotoNext"}
+    ,   {"cap":"Bookmarks"                  ,"sub":
+        [   {"cap":"Go to next bookmark"    ,"cmd":"cmd_BookmarkGotoNext"}
         ,   {"cap":"Go to prev bookmark"    ,"cmd":"cmd_BookmarkGotoPrev"}
-      //,   {"cap":"-"}
+        ,   {"cap":"-"}
         ,   {"cap":"Toggle bookmark"        ,"cmd":"cmd_BookmarkToggle"}
-      //,   {"cap":"Inverse bookmarks"      ,"cmd":"cmd_BookmarkInvertAll"}
+        ,   {"cap":"Inverse bookmarks"      ,"cmd":"cmd_BookmarkInvertAll"}
         ,   {"cap":"Clear all bookmarks"    ,"cmd":"cmd_BookmarkClearAll"}
-      //]}
+        ]}
     ]}
 ,"top-view":
     {"how":"clear"
@@ -152,11 +167,11 @@
     ,   {"cap":"Split tab"              ,"sub":
         [   {"cap":"Split"              ,"cmd":"cmd_SplitTabToggle"}
         ,   {"cap":"Split horizintal"   ,"cmd":"cmd_SplitTabHorzVert"}
-      //,   {"cap":"Split 30-70"        ,"cmd":"cmd_SplitTab3070"}
-      //,   {"cap":"Split 40-60"        ,"cmd":"cmd_SplitTab4060"}
-      //,   {"cap":"Split 50-50"        ,"cmd":"cmd_SplitTab5050"}
-      //,   {"cap":"Split 60-40"        ,"cmd":"cmd_SplitTab6040"}
-      //,   {"cap":"Split 70-30"        ,"cmd":"cmd_SplitTab7030"}
+        ,   {"cap":"Split 30-70"        ,"cmd":"cmd_SplitTab3070"}
+        ,   {"cap":"Split 40-60"        ,"cmd":"cmd_SplitTab4060"}
+        ,   {"cap":"Split 50-50"        ,"cmd":"cmd_SplitTab5050"}
+        ,   {"cap":"Split 60-40"        ,"cmd":"cmd_SplitTab6040"}
+        ,   {"cap":"Split 70-30"        ,"cmd":"cmd_SplitTab7030"}
         ]}
     ,   {"cap":"Toggle word-wrap"       ,"cmd":"cCommand_ToggleWordWrap"}
     ,   {"cap":"Toggle line numbers"    ,"cmd":"cCommand_ToggleLineNums"}
@@ -177,37 +192,19 @@
     ,   {"cap":"Toggle bottom panel"    ,"cmd":"cmd_ToggleBottomPanel"}
     ,   {"cap":"Toggle full screen"     ,"cmd":"cmd_ToggleFullScreen"}
     ]}
-//,"top-op":
-//  {"how":"add"
-//  ,"sub":
-//  [   {"cap":"-"}
-//  ,   {"cap":"Undo"                   ,"cmd":"cCommand_Undo"}
-//  ]}
-//,"top-help":
-//  {"how":"add"
-//  ,"sub":
-//  [   {"cap":"-"}
-//  ,   {"cap":"Undo"                   ,"cmd":"cCommand_Undo"}
-//  ]}
 ,"text":
     {"how":"clear"
     ,"sub":
-    [// {"cap":"Undo"                   ,"cmd":"cCommand_Undo"}
-  //,   {"cap":"Undo"                   ,"cmd":"cCommand_Undo"}
-  //,   {"cap":"Redo"                   ,"cmd":"cCommand_Redo"}
-  //,   {"cap":"-"}
-  //,   {"cap":"Cut"                    ,"cmd":"cCommand_ClipboardCut"}
-  //,   {"cap":"Copy"                   ,"cmd":"cCommand_ClipboardCopy"}
-  //,   {"cap":"Paste"                  ,"cmd":"cCommand_ClipboardPaste"}
-  //,   {"cap":"Delete"                 ,"cmd":"cCommand_KeyDelete"}                //??
-  //,   {"cap":"Select all"             ,"cmd":"cCommand_SelectAll"}
-    ,   {"cap":"Copy/append"            ,"cmd":"cCommand_ClipboardCopyAdd"}
+    [   {"cap":"Undo"                   ,"cmd":"cCommand_Undo"}
+    ,   {"cap":"Redo"                   ,"cmd":"cCommand_Redo"}
     ,   {"cap":"-"}
-    ,   {"cap":"All plugins"            ,"cmd":"plugins"}
-    ,   {"cap":"Show opts HTML-report"  ,"cmd":"cuda_opts_report,run"}
-    ,   {"cap":"Show keys HTML-report"  ,"cmd":"cuda_keys_report,run"}
-  //,   {"cap":"-"}
-  //,   {"cap":"Go to definition"       ,"cmd":"cmd_GotoDefinition"}
-  //,   {"cap":"AutoComplete"           ,"cmd":"cmd_AutoComplete"}
+    ,   {"cap":"Cut"                    ,"cmd":"cCommand_ClipboardCut"}
+    ,   {"cap":"Copy"                   ,"cmd":"cCommand_ClipboardCopy"}
+    ,   {"cap":"Paste"                  ,"cmd":"cCommand_ClipboardPaste"}
+    ,   {"cap":"Delete"                 ,"cmd":"cCommand_KeyDelete"}
+    ,   {"cap":"Select all"             ,"cmd":"cCommand_SelectAll"}
+    ,   {"cap":"-"}
+    ,   {"cap":"Go to definition"       ,"cmd":"cmd_GotoDefinition"}
+    ,   {"cap":"AutoComplete"           ,"cmd":"cmd_AutoComplete"}
     ]}
 }
