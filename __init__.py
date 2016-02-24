@@ -18,7 +18,7 @@ Duplicate:
 Authors:
     Andrey Kvichansky    (kvichans on github)
 Version:
-    '0.5.3 2016-02-03'
+    '0.5.4 2016-02-24'
 Wiki: github.com/kvichans/cudax_lib/wiki
 ToDo: (see end of file)
 '''
@@ -571,11 +571,11 @@ def _json_loads(s, **kw):
             Delete comments
             Delete unnecessary ',' from {,***,} and [,***,]
     '''
-    s = re.sub(r'//.*'   , ''  , s)
-    s = re.sub(r'{\s*,'  , '{' , s)
-    s = re.sub(r',\s*}'  , '}' , s)
-    s = re.sub(r'\[\s*,' , '[' , s)
-    s = re.sub(r',\s*\]' , ']' , s)
+    s = re.sub(r'(^|[^:])//.*'  , r'\1', s)     # :// in http://
+    s = re.sub(r'{\s*,'         , r'{' , s)
+    s = re.sub(r',\s*}'         , r'}' , s)
+    s = re.sub(r'\[\s*,'        , r'[' , s)
+    s = re.sub(r',\s*\]'        , r']' , s)
     try:
         ans = json.loads(s, **kw)
     except:
