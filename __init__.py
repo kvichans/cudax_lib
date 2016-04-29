@@ -1,4 +1,4 @@
-﻿''' Py-extensions for CudaText.
+''' Py-extensions for CudaText.
 Overridden option tools:
     get_opt(path, def_value=None, level=CONFIG_LEV_ALL, ed=ed)
         Reads option from configs (lexer-override config, then user config).
@@ -18,7 +18,7 @@ Duplicate:
 Authors:
     Andrey Kvichansky    (kvichans on github)
 Version:
-    '0.5.4 2016-02-24'
+    '0.5.5.at 2016-02-24'
 Wiki: github.com/kvichans/cudax_lib/wiki
 ToDo: (see end of file)
 '''
@@ -620,6 +620,20 @@ def _opt_for_keys(dct_tree, keys=(), def_val=None):
 
 def minmax(v1, v2):
     return min(v1, v2), max(v1, v2)
+
+def html_color_to_int(s):
+    """
+    String '#RRGGBB' or '#RGB' to integer
+    """
+    s = s.strip()
+    while s[0] == '#': s = s[1:]
+    if len(s)==3:
+        s = s[0]*2 + s[1]*2 + s[2]*2
+    if len(s)!=6:
+        raise Exception('Incorrect color token: '+s)
+    s = s[-2:] + s[2:4] + s[:2]
+    color = int(s, 16)
+    return color
 
 def icase(*pars):
     """ Params    cond1,val1[, cond2,val2, ...[, valElse]...]
