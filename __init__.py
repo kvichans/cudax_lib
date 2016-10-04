@@ -324,7 +324,7 @@ def _json_loads(s, **kw):
             Delete comments
             Delete unnecessary ',' from {,***,} and [,***,]
     '''
-    s = re.sub(r'(^|[^:])//.*'  , r'\1', s)     # :// in http://
+    s = re.sub(r'(^|[^:/])//.*' , r'\1', s)     # :// in http:// file:///
     s = re.sub(r'{\s*,'         , r'{' , s)
     s = re.sub(r',\s*}'         , r'}' , s)
     s = re.sub(r'\[\s*,'        , r'[' , s)
