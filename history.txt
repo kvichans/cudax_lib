@@ -1,3 +1,8 @@
+0.6.2 2018-04-26
+Added: list of pairs (ed property, options name)
+Added: log(msg) wait '###' in msg to show stack
+Fixed: get_opt/set_opt for value with escaped chars
+
 0.6.1 2016-09-13
 Removed: commenting is moved to plugin cuda_comments
 
