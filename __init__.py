@@ -1,4 +1,4 @@
-﻿""" Py-extensions for CudaText.
+""" Py-extensions for CudaText.
 Overridden option tools:
     get_opt(path, def_value=None, level=CONFIG_LEV_ALL, ed=ed, lexer='')
         Reads option from configs chain default-user-lexer-file.
@@ -11,7 +11,7 @@ Duplicate:
 Authors:
     Andrey Kvichansky    (kvichans on github)
 Version:
-    '0.6.2 2018-04-26'
+    '0.6.3 2018-04-30'
 Wiki: github.com/kvichans/cudax_lib/wiki
 ToDo: (see end of file)
 """
@@ -253,9 +253,12 @@ def set_opt(path, value, lev=CONFIG_LEV_USER, ed_cfg=ed, lexer=''):
             return None # Fail!
         return value
 
-    lex     = lexer                                 if lexer    else \
-              ed_cfg.get_prop(app.PROP_LEXER_CARET) if ed_cfg   else ''
-    if not lex: return None # Fail!
+    lex = ''
+    if lev==CONFIG_LEV_LEX:
+        lex     = lexer                                 if lexer    else \
+                  ed_cfg.get_prop(app.PROP_LEXER_CARET) if ed_cfg   else ''
+        if not lex: return None # Fail!
+
     cfg_json= os.path.join(app.app_path(app.APP_DIR_SETTINGS), icase(False,''
               ,lev==CONFIG_LEV_USER                          , 'user.json'
               ,lev==CONFIG_LEV_LEX                           , 'lexer {}.json'.format(lex)
