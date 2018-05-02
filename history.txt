@@ -1,3 +1,9 @@
+0.6.4 2018-05-02
+fixed: list of ed props and app options
+
+0.6.3 2018-04-30
+fixed: set_opt
+
 0.6.2 2018-04-26
 Added: list of pairs (ed property, options name)
 Added: log(msg) wait '###' in msg to show stack
