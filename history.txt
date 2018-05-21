@@ -1,3 +1,6 @@
+0.6.5 2018-05-21
+Added: get_opt waits new "lev" values CONFIG_LEV_USER_ONLY/CONFIG_LEV_LEX_ONLY to return USER/LEXER option without overridings
+
 0.6.4 2018-05-02
 fixed: list of ed props and app options
 
