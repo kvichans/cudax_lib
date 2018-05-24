@@ -11,7 +11,7 @@ Duplicate:
 Authors:
     Andrey Kvichansky    (kvichans on github)
 Version:
-    '0.6.5 2018-05-21'
+    '0.6.6 2018-05-24'
 Wiki: github.com/kvichans/cudax_lib/wiki
 ToDo: (see end of file)
 """
@@ -19,7 +19,8 @@ ToDo: (see end of file)
 import  cudatext        as app
 from    cudatext    import ed
 import  cudatext_cmd    as cmds
-import  os, json, re, sys, collections
+import  os, json, re, sys, collections, inspect
+odict = collections.OrderedDict
 
 # Overridden option tools:
 CONFIG_LEV_DEF      = 'def'
@@ -70,7 +71,7 @@ ONLY_NORM_SEL_MODE      = '{} works only with normal selection'
 ONLY_SINGLE_CRT         = "{} doesn't work with multi-carets"
 
 pass;                           # Logging
-pass;                           import inspect  # stack
+pass;                          #import inspect  # stack
 pass;                           from pprint import pformat
 pass;                           pfrm15=lambda d:pformat(d,width=15)
 pass;                           LOG = (-2==-2)  # Do or dont logging.
@@ -338,6 +339,144 @@ def set_opt(path, value, lev=CONFIG_LEV_USER, ed_cfg=ed, lexer=''):
     return value
    #def set_opt
 
+######################################
+#NOTE: plugin_history_item
+######################################
+PLING_HISTORY_JSON  = app.app_path(app.APP_DIR_SETTINGS)+os.sep+'plugin history.json'
+def get_plugin_history_item(key_or_path, default=None, module_name='_auto_detect', to_file=PLING_HISTORY_JSON):
+    """ Read from "plugin history.json" one value by string key or path (list of keys).
+        Parameters
+            key_or_path     Key(s) to navigate in json tree
+                            Type: str or [str]
+            default         Value to return  if no suitable node in json tree
+            module_name     Start node to navigate.
+                            If it is '_auto_detect' then name of caller module is used.
+                            If it is None then it is skipped.
+            to_file         Name of file to read. APP_DIR_SETTING will be joined if no full path.
+        
+        Return              Found value or default
+            
+        Examples (caller module is 'plg')
+        1. If no "plugin history.json"
+                get_history_item('k')                   returns None
+                get_history_item(['p', 'k'], 0)         returns 0
+        2. If "plugin history.json" contains 
+                {"k":1, "plg":{"k":2, "p":{"m":3}, "t":[0,1]}, "q":{"n":4}}
+                get_history_item('k', 0, None)          returns 1
+                get_history_item('k', 0)                returns 0
+                get_history_item('k', 0, 'plg')         returns 2
+                get_history_item('k', 0, 'oth')         returns 0
+                get_history_item(['p','m'], 0)          returns 3
+                get_history_item(['p','t'], [])         returns [0,1]
+                get_history_item('q', 0, None)          returns {'n':4}
+                get_history_item(['q','n'], 0, None)    returns 4
+    """
+    to_file = to_file   if os.sep in to_file else   app.app_path(app.APP_DIR_SETTINGS)+os.sep+to_file
+    if not os.path.exists(to_file):
+        pass;                   log('not exists',())
+        return default
+    data    = None
+    try:
+        data    = json.loads(open(to_file).read())
+    except:
+        pass;                   log('not load: {}',sys.exc_info())
+        return default
+    if module_name=='_auto_detect':
+        caller_globals  = inspect.stack()[1].frame.f_globals
+        module_name = inspect.getmodulename(caller_globals['__file__']) \
+                        if '__file__' in caller_globals else None
+    keys    = [key_or_path] if type(key_or_path)==str   else key_or_path
+    keys    = keys          if module_name is None      else [module_name]+keys
+    parents,\
+    key     = keys[:-1], keys[-1]
+    for parent in parents:
+        data= data.get(parent)
+        if type(data)!=dict:
+            pass;               log('not dict parent={}',(parent))
+            return default
+    return data.get(key, default)
+   #def get_plugin_history_item
+
+def set_plugin_history_item(key_or_path, value, module_name='_auto_detect', kill=False, to_file=PLING_HISTORY_JSON):
+    """ Write to "plugin history.json" one value by key or path (list of keys).
+        If any of node doesnot exist it will be added.
+        Or remove (if kill) one key+value pair (if suitable key exists).
+        Parameters
+            key_or_path     Key(s) to navigate in json tree
+                            Type: str or [str]
+            value           Value to set if suitable item in json tree exists
+            module_name     Start node to navigate.
+                            If it is '_auto_detect' then name of caller module is used.
+                            If it is None then it is skipped.
+            kill            Need to remove node in tree.
+                            if kill==True parm value is ignored
+            to_file         Name of file to write. APP_DIR_SETTING will be joined if no full path.
+        
+        Return              value (param)   if !kill and modification is successful
+                            value (killed)  if  kill and modification is successful
+                            None            if  kill and no path in tree (no changes)
+                            KeyError        if !kill and path has problem
+        Return  value
+            
+        Examples (caller module is 'plg')
+        1. If no "plugin history.json"          it will become
+            set_history_item('k',0,None)        {"k":0}
+            set_history_item('k',1)             {"plg":{"k":1}}
+            set_history_item('k',1,'plg')       {"plg":{"k":1}}
+            set_history_item('k',1,'oth')       {"oth":{"k":1}}
+            set_history_item('k',[1,2])         {"plg":{"k":[1,2]}}
+            set_history_item(['p','k'], 1)      {"plg":{"p":{"k":1}}}
+        
+        2. If "plugin history.json" contains        {"plg":{"k":1, "p":{"m":2}}}
+                                                    it will contain
+            set_history_item('k',0,None)            {"plg":{"k":1, "p":{"m":2}},"k":0}
+            set_history_item('k',0)                 {"plg":{"k":0, "p":{"m":2}}}
+            set_history_item('k',0,'plg')           {"plg":{"k":0, "p":{"m":2}}}
+            set_history_item('n',3)                 {"plg":{"k":1, "p":{"m":2}, "n":3}}
+            set_history_item(['p','m'], 4)          {"plg":{"k":1, "p":{"m":4}}}
+            set_history_item('p',{'m':4})           {"plg":{"k":1, "p":{"m":4}}}
+            set_history_item(['p','m','k'], 1)      KeyError (old m is not branch node)
+
+        3. If "plugin history.json" contains            {"plg":{"k":1, "p":{"m":2}}}
+                                                        it will contain
+            set_history_item('k',       kill=True)      {"plg":{       "p":{"m":2}}}
+            set_history_item('p',       kill=True)      {"plg":{"k":1}}
+            set_history_item(['p','m'], kill=True)      {"plg":{"k":1, "p":{}}}
+            set_history_item('n',       kill=True)      {"plg":{"k":1, "p":{"m":2}}}    (nothing to kill)
+    """
+    to_file = to_file   if os.sep in to_file else   app.app_path(app.APP_DIR_SETTINGS)+os.sep+to_file
+    body    = json.loads(open(to_file).read(), object_pairs_hook=odict) \
+                if os.path.exists(to_file) and os.path.getsize(to_file) != 0 else \
+              odict()
+
+    if module_name=='_auto_detect':
+        caller_globals  = inspect.stack()[1].frame.f_globals
+        module_name = inspect.getmodulename(caller_globals['__file__']) \
+                        if '__file__' in caller_globals else None
+    keys    = [key_or_path] if type(key_or_path)==str   else key_or_path
+    keys    = keys          if module_name is None      else [module_name]+keys
+    parents,\
+    key     = keys[:-1], keys[-1]
+    data    = body
+    for parent in parents:
+        if kill and parent not in data:
+            return None
+        data= data.setdefault(parent, odict())
+        if type(data)!=odict:
+            raise KeyError()
+    if kill:
+        if key not in data:
+            return None
+        value       = data.pop(key)
+    else:
+        data[key]   =  value
+    open(to_file, 'w').write(json.dumps(body, indent=2))
+    return value
+   #def set_plugin_history_item
+
+
+######################################
+######################################
 def _move_caret_down(cCrtSmb, rCrt, ed_=ed, id_crt=app.CARET_SET_ONE):
     ''' Caret will be moved to next line with save start column (if next line exists)
         Params

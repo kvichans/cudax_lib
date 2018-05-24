@@ -1,3 +1,6 @@
+0.6.6 2018-05-24
+Added: get_plugin_history_item/set_plugin_history_item to store data between Cuda executions
+
 0.6.5 2018-05-21
 Added: get_opt waits new "lev" values CONFIG_LEV_USER_ONLY/CONFIG_LEV_LEX_ONLY to return USER/LEXER option without overridings
 
