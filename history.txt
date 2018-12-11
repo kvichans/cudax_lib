@@ -1,3 +1,6 @@
+0.6.7 2018-12-10
+Added: set_opt can write complex paths (with "/"), but this will erase existing JSON comments and reindent all lines.
+
 0.6.6 2018-05-24
 Added: get_plugin_history_item/set_plugin_history_item to store data between Cuda executions
 
