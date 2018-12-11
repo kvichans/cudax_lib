@@ -262,7 +262,7 @@ def set_opt(path, value, lev=CONFIG_LEV_USER, ed_cfg=ed, lexer=''):
             return None # Fail!
         return value
 
-    lev = CONFIG_LEV_LEX                                if lexer and not lev else lev
+    lev = CONFIG_LEV_LEX                                if lexer    else lev
     lex = ''
     if lev==CONFIG_LEV_LEX:
         lex     = lexer                                 if lexer    else \
@@ -330,7 +330,8 @@ def set_opt(path, value, lev=CONFIG_LEV_USER, ed_cfg=ed, lexer=''):
         # 1. Repl   2. Parse
         body_c2p = comms2pairs(body)
         body_c2p = re.sub(r',\s*}$', '}', body_c2p)     # Kill "," after last value
-        body_js  = json.loads(body_c2p, object_pairs_hook=odict)
+        body_js  = _json_loads(body_c2p, object_pairs_hook=odict)
+#       body_js  = json.loads(body_c2p, object_pairs_hook=odict)
         # 3. Modify
         node    = body_js
         kv_node = None
@@ -432,7 +433,8 @@ def _json_loads(s, **kw):
             Delete comments
             Delete unnecessary ',' from {,***,} and [,***,]
     '''
-    s = re.sub(r'(^|[^:])//.*'  , r'\1', s)     # :// in http://
+#   s = re.sub(r'(^|[^:])//.*'  , r'\1', s)     # :// in http://
+    s = re.sub(r'(^|[^:])//.*'  , r'\1', s, flags=re.MULTILINE)     # :// in http://
     s = re.sub(r'{\s*,'         , r'{' , s)
     s = re.sub(r',\s*}'         , r'}' , s)
     s = re.sub(r'\[\s*,'        , r'[' , s)
