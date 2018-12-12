@@ -434,7 +434,20 @@ def _json_loads(s, **kw):
             Delete unnecessary ',' from {,***,} and [,***,]
     '''
 #   s = re.sub(r'(^|[^:])//.*'  , r'\1', s)     # :// in http://
-    s = re.sub(r'(^|[^:])//.*'  , r'\1', s, flags=re.MULTILINE)     # :// in http://
+#   s = re.sub(r'(^|[^:])//.*'  , r'\1', s, flags=re.MULTILINE)     # :// in http://
+    def rm_cm(match):
+        line    = match.group(0)
+        if line.lstrip().startswith('//'):  return ''
+        cm_pos  = line.rfind('//')                                          # last //
+        qu_pos  = line.rfind('"')
+        if -1==qu_pos:                      return line[:line.find('//')]   # first //
+        while qu_pos<cm_pos:
+            line    = line[:cm_pos]
+            cm_pos  = line.rfind('//')
+            if -1==cm_pos:                  return line
+            qu_pos  = line.rfind('"')
+        return line
+    s = re.sub(r'^.*//.*$'     , rm_cm, s, flags=re.MULTILINE)     # re.MULTILINE for ^$
     s = re.sub(r'{\s*,'         , r'{' , s)
     s = re.sub(r',\s*}'         , r'}' , s)
     s = re.sub(r'\[\s*,'        , r'[' , s)
@@ -444,7 +457,9 @@ def _json_loads(s, **kw):
     except:
         pass;                   LOG and log('FAIL: s={}',s)
         pass;                   LOG and log('sys.exc_info()={}',sys.exc_info())
-        open(kw.get('log_file', _get_log_file()), 'a').write('_json_loads FAIL: s=\n'+s)
+        log_file    = kw.get('log_file', _get_log_file())
+        open(log_file, 'a').write('_json_loads FAIL: s=\n'+s)
+        print('Error on load json. See ',log_file)
         ans = None
     return ans
 #   return json.loads(s, **kw)
