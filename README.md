@@ -1,2 +1,2 @@
 # cudax_lib
-Library of inside plugins for text editor CudaText
+Library of helper Python functions for CudaText. Used in many CudaText plugins.
