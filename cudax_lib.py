@@ -437,15 +437,19 @@ def _json_loads(s, **kw):
 #   s = re.sub(r'(^|[^:])//.*'  , r'\1', s, flags=re.MULTILINE)     # :// in http://
     def rm_cm(match):
         line    = match.group(0)
-        if line.lstrip().startswith('//'):  return ''
-        cm_pos  = line.rfind('//')                                          # last //
-        qu_pos  = line.rfind('"')
-        if -1==qu_pos:                      return line[:line.find('//')]   # first //
-        while qu_pos<cm_pos:
-            line    = line[:cm_pos]
-            cm_pos  = line.rfind('//')
-            if -1==cm_pos:                  return line
-            qu_pos  = line.rfind('"')
+        pos     = 0
+        in_str  = False
+        while pos<len(line):
+            ch  = line[pos]
+            if ch=='\\':
+                pos += 2
+            else:
+                if ch=='"':
+                    in_str = not in_str
+                else:
+                    if line[pos:pos+2]=='//' and not in_str:
+                        return line[:pos]
+                pos += 1
         return line
     s = re.sub(r'^.*//.*$'     , rm_cm, s, flags=re.MULTILINE)     # re.MULTILINE for ^$
     s = re.sub(r'{\s*,'         , r'{' , s)
